@@ -2,278 +2,295 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SiliDish — Stretchable Silicone Dish Cover</title>
+<title>SiliDish — The Last Cover You'll Ever Buy</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
-  body{font-family:'Inter',system-ui,sans-serif;background:#040812;color:#e2e8f0}
-  .glass{background:rgba(255,255,255,.04);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08)}
-  .gradient-text{background:linear-gradient(135deg,#06b6d4,#3b82f6,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-  .btn{background:linear-gradient(135deg,#06b6d4,#3b82f6);border:none;padding:12px 28px;border-radius:10px;cursor:pointer;font-weight:700;color:white;transition:all .2s}
-  .btn:hover{transform:translateY(-1px);box-shadow:0 8px 25px rgba(6,182,212,.4)}
-  .btn-outline{background:transparent;border:2px solid #06b6d4;padding:10px 24px;border-radius:10px;cursor:pointer;font-weight:600;color:#06b6d4;transition:all .2s}
-  .btn-outline:hover{background:rgba(6,182,212,.1)}
-  input,textarea,select{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:10px 14px;color:#e2e8f0;width:100%}
-  input:focus,textarea:focus,select:focus{outline:none;border-color:#06b6d4}
-  .product-hero{background:linear-gradient(135deg,rgba(6,182,212,.15),rgba(59,130,246,.08));border:1px solid rgba(6,182,212,.2);border-radius:24px;padding:40px}
-  .feature-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:24px;transition:all .3s}
-  .feature-card:hover{border-color:rgba(6,182,212,.3);transform:translateY(-2px)}
-  .order-card{background:linear-gradient(145deg,rgba(6,182,212,.06),rgba(59,130,246,.04));border:1px solid rgba(6,182,212,.2);border-radius:14px;padding:18px;transition:all .3s}
-  .order-card:hover{border-color:rgba(6,182,212,.4)}
-  .tab-active{background:rgba(6,182,212,.2);border-bottom:2px solid #06b6d4}
-  .warning{background:rgba(234,179,8,.08);border:1px solid rgba(234,179,8,.25);border-radius:10px;padding:12px 16px;font-size:13px;color:#fde68a}
-  .color-dot{width:32px;height:32px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all .2s}
-  .color-dot.selected{border-color:white;transform:scale(1.2)}
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#fff;color:#1a1a1a;font-family:'Inter',sans-serif}
+h1,h2,h3,.serif{font-family:'Fraunces',serif}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:20px 60px;border-bottom:1px solid #f0f0f0;position:sticky;top:0;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);z-index:10}
+.nav-logo{font-size:22px;font-weight:800;color:#1a1a1a;font-family:'Fraunces',serif}
+.nav-tabs{display:flex;gap:4px;background:#f5f5f5;padding:4px;border-radius:10px}
+.nt{padding:8px 18px;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;color:#888;transition:all .2s}
+.nt.active{background:#fff;color:#1a1a1a;font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.hero{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:60px;padding:80px 60px;max-width:1200px;margin:0 auto}
+.hero-left h1{font-size:54px;font-weight:900;line-height:1.05;margin-bottom:18px}
+.hero-left h1 em{font-style:italic;color:#3d9970}
+.hero-left p{font-size:18px;color:#555;line-height:1.7;margin-bottom:32px}
+.hero-visual{background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-radius:32px;height:420px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.dish-emoji{font-size:120px;animation:float 4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+.silicone-ring{position:absolute;width:280px;height:60px;border:6px solid rgba(61,153,112,.3);border-radius:50%;bottom:80px;animation:stretch 3s ease-in-out infinite}
+@keyframes stretch{0%,100%{width:280px}50%{width:320px}}
+.cta-row{display:flex;gap:14px;align-items:center}
+.btn-green{background:#3d9970;color:#fff;border:none;padding:15px 32px;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.btn-green:hover{background:#2e7d56;transform:translateY(-2px);box-shadow:0 10px 24px rgba(61,153,112,.3)}
+.btn-outline-g{background:transparent;border:1.5px solid #3d9970;color:#3d9970;padding:14px 28px;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.btn-outline-g:hover{background:#f0faf6}
+.features-strip{background:#f9f9f7;padding:60px;display:grid;grid-template-columns:repeat(3,1fr);gap:32px;max-width:1200px;margin:0 auto}
+.feat{text-align:center;padding:28px}
+.feat-icon{font-size:48px;margin-bottom:16px;display:block}
+.feat h3{font-size:18px;font-weight:700;margin-bottom:8px;font-family:'Fraunces',serif}
+.feat p{font-size:14px;color:#777;line-height:1.6}
+.pricing-row{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1000px;margin:0 auto;padding:60px}
+.price-card{border:1.5px solid #e8e8e8;border-radius:20px;padding:28px;text-align:center;transition:all .2s;position:relative}
+.price-card:hover{border-color:#3d9970;box-shadow:0 8px 24px rgba(61,153,112,.1)}
+.price-card.featured{border-color:#3d9970;background:linear-gradient(180deg,#f0faf6,#fff)}
+.featured-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#3d9970;color:#fff;padding:4px 16px;border-radius:999px;font-size:12px;font-weight:700}
+.price-val{font-size:40px;font-weight:900;font-family:'Fraunces',serif;color:#1a1a1a;margin:16px 0 8px}
+.order-form{max-width:700px;margin:0 auto;padding:0 60px 60px}
+.form-section{background:#f9f9f7;border-radius:20px;padding:32px;margin-bottom:24px}
+label{font-size:12px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px;margin-top:14px}
+input,select,textarea{border:1.5px solid #e8e8e8;border-radius:10px;padding:11px 14px;font-size:14px;width:100%;outline:none;transition:border .2s;font-family:'Inter',sans-serif;background:#fff}
+input:focus,select:focus,textarea:focus{border-color:#3d9970}
+.color-circle{width:36px;height:36px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all .2s;display:inline-block;margin-right:8px}
+.color-circle.selected{border-color:#1a1a1a;transform:scale(1.2)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.order-list{max-width:900px;margin:0 auto;padding:0 60px 60px}
+.order-row{background:#fff;border:1.5px solid #e8e8e8;border-radius:12px;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;transition:all .2s}
+.order-row:hover{border-color:#3d9970}
+.panel{display:none}.panel.active{display:block}
+.warn{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:12px 18px;font-size:13px;color:#92400e;margin-bottom:24px;font-family:'Inter',sans-serif}
 </style>
 </head>
 <body>
-<nav class="glass sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
-  <div class="flex items-center gap-3">
-    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-xl">🍽️</div>
-    <div><h1 class="font-black text-xl gradient-text">SiliDish</h1><p class="text-xs text-slate-400">Stretchable Silicone Dish Cover</p></div>
-  </div>
-  <div class="flex gap-2">
-    <button onclick="showTab('product')" id="tab-product" class="px-4 py-2 rounded-lg text-sm font-medium tab-active transition-all">🍽️ Product</button>
-    <button onclick="showTab('order')" id="tab-order" class="px-4 py-2 rounded-lg text-sm font-medium transition-all">🛒 Pre-Order</button>
-    <button onclick="showTab('b2b')" id="tab-b2b" class="px-4 py-2 rounded-lg text-sm font-medium transition-all">🏢 B2B</button>
-    <button onclick="showTab('admin')" id="tab-admin" class="px-4 py-2 rounded-lg text-sm font-medium transition-all">📊 Orders</button>
-  </div>
-</nav>
 
-<div class="max-w-5xl mx-auto px-6 py-8">
+<div class="nav">
+  <div class="nav-logo">SiliDish</div>
+  <div class="nav-tabs">
+    <div class="nt active" onclick="showTab('product')" id="nt-product">Product</div>
+    <div class="nt" onclick="showTab('order')" id="nt-order">Pre-Order</div>
+    <div class="nt" onclick="showTab('b2b')" id="nt-b2b">B2B</div>
+    <div class="nt" onclick="showTab('admin')" id="nt-admin">Admin</div>
+  </div>
+  <div style="font-size:13px;color:#888"><span id="order-count" style="font-weight:700;color:#3d9970">0</span> pre-orders</div>
+</div>
 
-  <!-- PRODUCT PAGE -->
-  <div id="panel-product">
-    <div class="product-hero mb-12 text-center">
-      <div class="text-7xl mb-6">🍽️</div>
-      <h2 class="text-4xl font-black gradient-text mb-4">One cover. Any dish.</h2>
-      <p class="text-xl text-slate-300 max-w-2xl mx-auto mb-8">Food-grade silicone that stretches to fit any plate, bowl or container. Keep food fresh, reduce plastic waste.</p>
-      <div class="flex justify-center gap-4">
-        <button onclick="showTab('order')" class="btn text-lg px-10">🛒 Pre-Order Now</button>
-        <button onclick="showTab('b2b')" class="btn-outline text-lg px-8">🏢 B2B Inquiry</button>
+<!-- PRODUCT -->
+<div id="panel-product" class="panel active">
+  <div class="hero">
+    <div class="hero-left">
+      <div style="display:inline-flex;align-items:center;gap:6px;background:#f0faf6;border:1px solid #a7f3d0;border-radius:999px;padding:6px 14px;font-size:12px;font-weight:700;color:#3d9970;margin-bottom:16px">♻️ ZERO SINGLE-USE PLASTIC</div>
+      <h1>The <em>last cover</em><br>you'll ever buy.</h1>
+      <p>Food-grade silicone that stretches to fit any plate, bowl or container — from 15cm to 35cm. Microwave safe. Dishwasher safe. Built to last 3+ years.</p>
+      <div class="cta-row">
+        <button class="btn-green" onclick="showTab('order')">Pre-Order Now →</button>
+        <button class="btn-outline-g" onclick="showTab('b2b')">B2B Inquiry</button>
+      </div>
+      <div style="display:flex;gap:24px;margin-top:28px">
+        <div><div style="font-size:22px;font-weight:800;font-family:'Fraunces',serif">3+</div><div style="font-size:12px;color:#888">Years lifespan</div></div>
+        <div><div style="font-size:22px;font-weight:800;font-family:'Fraunces',serif">8</div><div style="font-size:12px;color:#888">Colors available</div></div>
+        <div><div style="font-size:22px;font-weight:800;font-family:'Fraunces',serif">€8.99</div><div style="font-size:12px;color:#888">Starting price</div></div>
       </div>
     </div>
-
-    <!-- Features -->
-    <div class="grid grid-cols-3 gap-6 mb-12">
-      <div class="feature-card text-center">
-        <div class="text-4xl mb-3">🌿</div>
-        <h3 class="font-bold text-lg mb-2">Food Grade Silicone</h3>
-        <p class="text-sm text-slate-400">100% BPA-free, FDA approved material. Safe for all foods, microwave and freezer friendly.</p>
-      </div>
-      <div class="feature-card text-center">
-        <div class="text-4xl mb-3">↔️</div>
-        <h3 class="font-bold text-lg mb-2">Universal Fit</h3>
-        <p class="text-sm text-slate-400">Stretches from 15cm to 35cm diameter. One cover fits plates, bowls, pots, and pans.</p>
-      </div>
-      <div class="feature-card text-center">
-        <div class="text-4xl mb-3">♻️</div>
-        <h3 class="font-bold text-lg mb-2">Zero Plastic Waste</h3>
-        <p class="text-sm text-slate-400">Replace hundreds of single-use plastic wraps. Lasts 3+ years with proper care.</p>
-      </div>
-      <div class="feature-card text-center">
-        <div class="text-4xl mb-3">🧹</div>
-        <h3 class="font-bold text-lg mb-2">Easy to Clean</h3>
-        <p class="text-sm text-slate-400">Dishwasher safe. Just rinse or toss in the machine.</p>
-      </div>
-      <div class="feature-card text-center">
-        <div class="text-4xl mb-3">🎨</div>
-        <h3 class="font-bold text-lg mb-2">8 Colors Available</h3>
-        <p class="text-sm text-slate-400">Match your kitchen style. From minimalist white to vibrant patterns.</p>
-      </div>
-      <div class="feature-card text-center">
-        <div class="text-4xl mb-3">💰</div>
-        <h3 class="font-bold text-lg mb-2">Affordable</h3>
-        <p class="text-sm text-slate-400">Starting from €8.99. Family pack 3-pieces at €19.99.</p>
-      </div>
-    </div>
-
-    <!-- Pricing -->
-    <div class="grid grid-cols-3 gap-6">
-      <div class="glass rounded-2xl p-6 text-center border border-white/10">
-        <h3 class="font-bold text-lg mb-2">Single</h3>
-        <div class="text-3xl font-black text-cyan-400 my-4">€8.99</div>
-        <p class="text-sm text-slate-400 mb-4">1 SiliDish cover<br>Your color choice<br>Free shipping over €25</p>
-        <button onclick="showTab('order')" class="btn w-full">Order</button>
-      </div>
-      <div class="glass rounded-2xl p-6 text-center border border-cyan-500/40" style="background:rgba(6,182,212,.06)">
-        <div class="text-xs font-bold text-cyan-400 mb-2">⭐ MOST POPULAR</div>
-        <h3 class="font-bold text-lg mb-2">Family Pack</h3>
-        <div class="text-3xl font-black text-cyan-400 my-4">€19.99</div>
-        <p class="text-sm text-slate-400 mb-4">3 SiliDish covers<br>Mix colors<br>Save 26%</p>
-        <button onclick="showTab('order')" class="btn w-full">Order Pack</button>
-      </div>
-      <div class="glass rounded-2xl p-6 text-center border border-white/10">
-        <h3 class="font-bold text-lg mb-2">Pro Pack</h3>
-        <div class="text-3xl font-black text-cyan-400 my-4">€34.99</div>
-        <p class="text-sm text-slate-400 mb-4">6 SiliDish covers<br>All sizes + colors<br>Save 35%</p>
-        <button onclick="showTab('order')" class="btn w-full">Order Pro</button>
-      </div>
+    <div class="hero-visual">
+      <div class="dish-emoji">🍽️</div>
+      <div class="silicone-ring"></div>
     </div>
   </div>
 
-  <!-- PRE-ORDER -->
-  <div id="panel-order" class="hidden">
-    <div class="warning mb-6"><i class="fas fa-exclamation-triangle mr-2 text-yellow-400"></i><strong>⚠️ Note:</strong> E-commerce operations and payments require partita IVA. Parents must act as legal representatives for all transactions.</div>
-    <h2 class="text-2xl font-bold mb-6">Pre-Order SiliDish 🛒</h2>
-    <div class="grid grid-cols-2 gap-8">
-      <div class="glass rounded-2xl p-6 space-y-4">
-        <div class="grid grid-cols-2 gap-3">
-          <div><label class="text-xs text-slate-400 mb-1 block">First Name *</label><input id="o-first" placeholder="Mario"></div>
-          <div><label class="text-xs text-slate-400 mb-1 block">Last Name *</label><input id="o-last" placeholder="Rossi"></div>
-        </div>
-        <div><label class="text-xs text-slate-400 mb-1 block">Email *</label><input id="o-email" type="email" placeholder="mario@email.com"></div>
-        <div><label class="text-xs text-slate-400 mb-1 block">Phone</label><input id="o-phone" placeholder="+39 333 1234567"></div>
-        <div><label class="text-xs text-slate-400 mb-1 block">Pack</label>
-          <select id="o-pack">
-            <option value="Single">Single — €8.99 (1 cover)</option>
-            <option value="Family Pack">Family Pack — €19.99 (3 covers)</option>
-            <option value="Pro Pack">Pro Pack — €34.99 (6 covers)</option>
-          </select>
-        </div>
-        <div><label class="text-xs text-slate-400 mb-1 block">Quantity</label>
-          <select id="o-qty"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="5">5</option></select>
-        </div>
-        <div>
-          <label class="text-xs text-slate-400 mb-2 block">Color Preference</label>
-          <div class="flex gap-3 flex-wrap">
-            <div class="color-dot selected" style="background:#ffffff;border-color:#06b6d4" onclick="selectColor(this,'White')" title="White"></div>
-            <div class="color-dot" style="background:#1e293b" onclick="selectColor(this,'Midnight Blue')" title="Midnight Blue"></div>
-            <div class="color-dot" style="background:#166534" onclick="selectColor(this,'Forest Green')" title="Forest Green"></div>
-            <div class="color-dot" style="background:#dc2626" onclick="selectColor(this,'Coral Red')" title="Coral Red"></div>
-            <div class="color-dot" style="background:#7c3aed" onclick="selectColor(this,'Lavender')" title="Lavender"></div>
-            <div class="color-dot" style="background:#d97706" onclick="selectColor(this,'Sunset Orange')" title="Sunset Orange"></div>
-            <div class="color-dot" style="background:#0369a1" onclick="selectColor(this,'Ocean Blue')" title="Ocean Blue"></div>
-            <div class="color-dot" style="background:#be123c" onclick="selectColor(this,'Rose')" title="Rose"></div>
-          </div>
-          <p class="text-xs text-slate-500 mt-2" id="selected-color-label">Selected: White</p>
-        </div>
-        <div><label class="text-xs text-slate-400 mb-1 block">Shipping Address *</label><textarea id="o-addr" rows="2" placeholder="Via Roma 12, 20100 Milano, Italy"></textarea></div>
-        <div><label class="text-xs text-slate-400 mb-1 block">Notes</label><input id="o-notes" placeholder="e.g. Leave at door, gift wrap..."></div>
-        <button onclick="placeOrder()" class="btn w-full text-lg"><i class="fas fa-shopping-cart mr-2"></i>Place Pre-Order</button>
-        <p class="text-xs text-slate-500 text-center">We'll contact you when production is confirmed. No charge now.</p>
-      </div>
-      <div class="glass rounded-2xl p-6">
-        <h3 class="font-semibold mb-4 gradient-text">Order Summary</h3>
-        <div id="order-summary" class="space-y-3">
-          <div class="flex justify-between text-sm"><span class="text-slate-400">Product</span><span>SiliDish</span></div>
-          <div class="flex justify-between text-sm"><span class="text-slate-400">Pack</span><span id="sum-pack">Single</span></div>
-          <div class="flex justify-between text-sm"><span class="text-slate-400">Qty</span><span id="sum-qty">1</span></div>
-          <div class="flex justify-between text-sm"><span class="text-slate-400">Color</span><span id="sum-color">White</span></div>
-          <div class="border-t border-white/10 pt-3 flex justify-between font-bold"><span>Estimated Total</span><span class="text-cyan-400" id="sum-total">€8.99</span></div>
-        </div>
-        <div class="mt-8 space-y-3 text-sm text-slate-400">
-          <div class="flex gap-2"><i class="fas fa-check text-cyan-400 mt-0.5"></i><span>Pre-order is free — you pay only when product ships</span></div>
-          <div class="flex gap-2"><i class="fas fa-check text-cyan-400 mt-0.5"></i><span>Early bird 15% discount for pre-orders</span></div>
-          <div class="flex gap-2"><i class="fas fa-check text-cyan-400 mt-0.5"></i><span>Free shipping on orders over €25</span></div>
-          <div class="flex gap-2"><i class="fas fa-check text-cyan-400 mt-0.5"></i><span>30-day return policy</span></div>
-        </div>
-      </div>
+  <div style="background:#f9f9f7;padding:2px 0">
+    <div class="features-strip">
+      <div class="feat"><span class="feat-icon">🌿</span><h3>Food Grade Silicone</h3><p>100% BPA-free, FDA and EU food-contact approved. Safe for every food type.</p></div>
+      <div class="feat"><span class="feat-icon">↔️</span><h3>Universal Stretch</h3><p>One cover fits plates from 15cm to 35cm. Replace 10 plastic wraps with 1 SiliDish.</p></div>
+      <div class="feat"><span class="feat-icon">🧹</span><h3>Effortless Care</h3><p>Rinse under tap or go straight in the dishwasher. Ready for the next meal.</p></div>
     </div>
   </div>
 
-  <!-- B2B -->
-  <div id="panel-b2b" class="hidden">
-    <div class="warning mb-6"><i class="fas fa-exclamation-triangle mr-2 text-yellow-400"></i><strong>⚠️ B2B contracts require partita IVA.</strong> Parents must sign all business agreements as legal representatives.</div>
-    <h2 class="text-2xl font-bold mb-2">B2B Partnership 🏢</h2>
-    <p class="text-slate-400 mb-8">Restaurants, hotels, supermarkets — get SiliDish at wholesale price.</p>
-    <div class="grid grid-cols-2 gap-8">
-      <div class="glass rounded-2xl p-6 space-y-4">
-        <div><label class="text-xs text-slate-400 mb-1 block">Company Name *</label><input id="b-company" placeholder="Ristorante La Bella Italia SRL"></div>
-        <div><label class="text-xs text-slate-400 mb-1 block">Contact Name *</label><input id="b-contact" placeholder="Marco Bianchi"></div>
-        <div><label class="text-xs text-slate-400 mb-1 block">Email *</label><input id="b-email" type="email" placeholder="acquisti@company.com"></div>
-        <div><label class="text-xs text-slate-400 mb-1 block">Phone</label><input id="b-phone" placeholder="+39 02 12345678"></div>
-        <div><label class="text-xs text-slate-400 mb-1 block">Estimated Monthly Volume</label>
-          <select id="b-volume">
-            <option>50-100 units/month</option>
-            <option>100-500 units/month</option>
-            <option>500-1000 units/month</option>
-            <option>1000+ units/month</option>
-          </select>
-        </div>
-        <div><label class="text-xs text-slate-400 mb-1 block">Message / Requirements</label><textarea id="b-notes" rows="3" placeholder="Type of business, custom branding needs, delivery details..."></textarea></div>
-        <button onclick="saveB2B()" class="btn w-full"><i class="fas fa-handshake mr-2"></i>Request Partnership</button>
-      </div>
-      <div class="glass rounded-2xl p-6">
-        <h3 class="font-bold text-lg gradient-text mb-6">Why Partner with SiliDish?</h3>
-        <div class="space-y-4">
-          <div class="flex gap-3"><div class="w-10 h-10 rounded-lg bg-cyan-500/20 flex items-center justify-center text-xl flex-shrink-0">💰</div><div><p class="font-medium">Wholesale Pricing</p><p class="text-sm text-slate-400">Up to 60% off retail for volume orders</p></div></div>
-          <div class="flex gap-3"><div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center text-xl flex-shrink-0">🎨</div><div><p class="font-medium">Custom Branding</p><p class="text-sm text-slate-400">Your logo on every cover (min 500 units)</p></div></div>
-          <div class="flex gap-3"><div class="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center text-xl flex-shrink-0">🌿</div><div><p class="font-medium">Eco Certification</p><p class="text-sm text-slate-400">Help your business reduce plastic waste</p></div></div>
-          <div class="flex gap-3"><div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center text-xl flex-shrink-0">📦</div><div><p class="font-medium">Bulk Delivery</p><p class="text-sm text-slate-400">Direct warehouse delivery across Europe</p></div></div>
-        </div>
-      </div>
+  <div class="pricing-row">
+    <div class="price-card">
+      <div style="font-size:16px;font-weight:700">Single</div>
+      <div class="price-val">€8.99</div>
+      <div style="font-size:13px;color:#888;margin-bottom:20px">1 cover · your color</div>
+      <button class="btn-outline-g" style="width:100%" onclick="showTab('order')">Order</button>
     </div>
-  </div>
-
-  <!-- ADMIN / ORDERS -->
-  <div id="panel-admin" class="hidden">
-    <div class="flex justify-between items-center mb-6">
-      <div><h2 class="text-2xl font-bold">Order Management 📊</h2><p class="text-slate-400 text-sm">All pre-orders and B2B inquiries</p></div>
-      <div id="admin-stats" class="flex gap-4 text-sm">
-        <div class="glass rounded-lg px-3 py-2"><span id="a-orders" class="font-bold text-cyan-400">0</span> <span class="text-slate-400">orders</span></div>
-        <div class="glass rounded-lg px-3 py-2"><span id="a-b2b" class="font-bold text-blue-400">0</span> <span class="text-slate-400">B2B</span></div>
-      </div>
+    <div class="price-card featured">
+      <span class="featured-badge">⭐ BEST VALUE</span>
+      <div style="font-size:16px;font-weight:700">Family Pack</div>
+      <div class="price-val">€19.99</div>
+      <div style="font-size:13px;color:#888;margin-bottom:6px">3 covers · save 26%</div>
+      <div style="font-size:12px;color:#3d9970;font-weight:600;margin-bottom:16px">Mix & match colors</div>
+      <button class="btn-green" style="width:100%" onclick="showTab('order')">Order Pack</button>
     </div>
-    <h3 class="font-semibold text-slate-400 mb-3 text-sm uppercase">Consumer Pre-Orders</h3>
-    <div id="orders-list" class="space-y-3 mb-8"></div>
-    <h3 class="font-semibold text-slate-400 mb-3 text-sm uppercase">B2B Inquiries</h3>
-    <div id="b2b-list" class="space-y-3"></div>
+    <div class="price-card">
+      <div style="font-size:16px;font-weight:700">Pro Pack</div>
+      <div class="price-val">€34.99</div>
+      <div style="font-size:13px;color:#888;margin-bottom:20px">6 covers · save 35%</div>
+      <button class="btn-outline-g" style="width:100%" onclick="showTab('order')">Order Pro</button>
+    </div>
   </div>
 </div>
 
-<div id="toast" class="fixed bottom-6 right-6 px-6 py-3 rounded-xl font-semibold hidden z-50 text-white"></div>
+<!-- ORDER -->
+<div id="panel-order" class="panel">
+  <div class="order-form">
+    <div style="text-align:center;padding:40px 0 32px">
+      <h2 class="serif" style="font-size:32px;font-weight:800;margin-bottom:8px">Pre-Order SiliDish</h2>
+      <p style="color:#888;font-size:15px">Reserve yours now — no charge until we ship.</p>
+    </div>
+    <div class="warn">⚠️ E-commerce operations require partita IVA. Parents must act as legal representatives for all transactions and payment processing.</div>
+    <div class="form-section">
+      <div class="g2">
+        <div><label>First Name *</label><input id="of" placeholder="Mario"></div>
+        <div><label>Last Name *</label><input id="ol" placeholder="Rossi"></div>
+        <div><label>Email *</label><input id="oe" type="email" placeholder="mario@email.com"></div>
+        <div><label>Phone</label><input id="op" placeholder="+39 333..."></div>
+      </div>
+      <label>Pack *</label>
+      <select id="opk" onchange="updateSummary()">
+        <option value="Single|8.99">Single — €8.99</option>
+        <option value="Family Pack|19.99">Family Pack (3 covers) — €19.99</option>
+        <option value="Pro Pack|34.99">Pro Pack (6 covers) — €34.99</option>
+      </select>
+      <label>Quantity</label>
+      <select id="oqt" onchange="updateSummary()"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="5">5</option></select>
+      <label>Color Choice</label>
+      <div style="margin-top:8px;margin-bottom:4px">
+        <div class="color-circle selected" style="background:#fff;box-shadow:0 0 0 1px #ccc" onclick="pickColor(this,'White')" title="White"></div>
+        <div class="color-circle" style="background:#1e293b" onclick="pickColor(this,'Midnight')" title="Midnight Blue"></div>
+        <div class="color-circle" style="background:#166534" onclick="pickColor(this,'Forest Green')" title="Forest Green"></div>
+        <div class="color-circle" style="background:#dc2626" onclick="pickColor(this,'Coral Red')" title="Coral Red"></div>
+        <div class="color-circle" style="background:#7c3aed" onclick="pickColor(this,'Lavender')" title="Lavender"></div>
+        <div class="color-circle" style="background:#d97706" onclick="pickColor(this,'Amber')" title="Amber"></div>
+        <div class="color-circle" style="background:#0284c7" onclick="pickColor(this,'Ocean Blue')" title="Ocean Blue"></div>
+        <div class="color-circle" style="background:#be123c" onclick="pickColor(this,'Rose')" title="Rose"></div>
+      </div>
+      <div style="font-size:12px;color:#888;margin-top:4px" id="color-label">Selected: White</div>
+      <label>Shipping Address *</label>
+      <textarea id="oadr" rows="2" placeholder="Via Roma 12, 20100 Milano, Italy"></textarea>
+    </div>
+    <div style="background:#f0faf6;border:1.5px solid #a7f3d0;border-radius:16px;padding:24px;margin-bottom:20px">
+      <div style="font-size:15px;font-weight:700;margin-bottom:14px;font-family:'Fraunces',serif">Order Summary</div>
+      <div style="display:flex;justify-content:space-between;font-size:14px;color:#555;margin-bottom:6px"><span>Pack</span><span id="sum-pack">Single</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:14px;color:#555;margin-bottom:6px"><span>Quantity</span><span id="sum-qty">1</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:14px;color:#555;margin-bottom:6px"><span>Color</span><span id="sum-color">White</span></div>
+      <div style="border-top:1px solid #a7f3d0;margin-top:12px;padding-top:12px;display:flex;justify-content:space-between;font-size:18px;font-weight:800;font-family:'Fraunces',serif"><span>Total</span><span style="color:#3d9970" id="sum-total">€8.99</span></div>
+    </div>
+    <button class="btn-green" style="width:100%;font-size:17px;padding:17px" onclick="placeOrder()">🌿 Place Pre-Order</button>
+    <p style="text-align:center;font-size:13px;color:#aaa;margin-top:12px">Early bird gets 15% off at launch · No charge now</p>
+  </div>
+</div>
+
+<!-- B2B -->
+<div id="panel-b2b" class="panel">
+  <div style="max-width:900px;margin:0 auto;padding:60px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start">
+      <div>
+        <div style="font-size:12px;font-weight:700;color:#3d9970;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">For businesses</div>
+        <h2 class="serif" style="font-size:36px;font-weight:800;margin-bottom:16px;line-height:1.2">Partner with SiliDish</h2>
+        <p style="color:#555;font-size:15px;line-height:1.7;margin-bottom:28px">Restaurants, hotels, supermarkets. Get wholesale pricing, custom branding, and a genuine sustainability story for your customers.</p>
+        <div class="warn">⚠️ Business contracts require partita IVA and parents as legal representatives.</div>
+        <div style="space-y:16px;margin-top:20px">
+          <div style="display:flex;gap:14px;margin-bottom:16px;align-items:start"><div style="width:36px;height:36px;background:#f0faf6;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">💰</div><div><div style="font-weight:600;margin-bottom:3px">Up to 60% off retail</div><div style="font-size:13px;color:#777">Volume discounts start at 50 units/month</div></div></div>
+          <div style="display:flex;gap:14px;margin-bottom:16px;align-items:start"><div style="width:36px;height:36px;background:#f0faf6;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🎨</div><div><div style="font-weight:600;margin-bottom:3px">Custom branding</div><div style="font-size:13px;color:#777">Your logo, your colors (min 500 units)</div></div></div>
+          <div style="display:flex;gap:14px;margin-bottom:16px;align-items:start"><div style="width:36px;height:36px;background:#f0faf6;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🌿</div><div><div style="font-weight:600;margin-bottom:3px">Eco certification</div><div style="font-size:13px;color:#777">Use our green credentials in your marketing</div></div></div>
+        </div>
+      </div>
+      <div style="background:#f9f9f7;border-radius:20px;padding:28px">
+        <div style="font-size:16px;font-weight:700;margin-bottom:18px;font-family:'Fraunces',serif">Request Partnership</div>
+        <div class="g2">
+          <div><label>Company *</label><input id="bc" placeholder="Ristorante Roma SRL"></div>
+          <div><label>Contact *</label><input id="bco" placeholder="Marco Bianchi"></div>
+          <div><label>Email *</label><input id="be" type="email" placeholder="acquisti@company.it"></div>
+          <div><label>Volume (units/month)</label><select id="bv"><option>50-100</option><option>100-500</option><option>500-1000</option><option>1000+</option></select></div>
+        </div>
+        <label>Message</label>
+        <textarea id="bm" rows="3" placeholder="Type of business, custom needs..."></textarea>
+        <button class="btn-green" style="width:100%;margin-top:18px;padding:13px" onclick="saveB2B()">Send Inquiry</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="panel-admin" class="panel">
+  <div class="order-list">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding-top:40px;margin-bottom:28px">
+      <h2 class="serif" style="font-size:28px;font-weight:800">Orders Dashboard</h2>
+      <div style="display:flex;gap:12px">
+        <div style="background:#f0faf6;border:1px solid #a7f3d0;border-radius:8px;padding:8px 16px;font-size:13px"><span id="a-ord" style="font-weight:800;color:#3d9970">0</span> orders</div>
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:8px 16px;font-size:13px"><span id="a-b2b" style="font-weight:800;color:#1d4ed8">0</span> B2B</div>
+      </div>
+    </div>
+    <div style="font-size:13px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Consumer Pre-Orders</div>
+    <div id="orders-admin"></div>
+    <div style="font-size:13px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.5px;margin:24px 0 12px">B2B Inquiries</div>
+    <div id="b2b-admin"></div>
+  </div>
+</div>
 
 <script>
-const SUPABASE_URL='https://nmulrsbqdeqokvrybapn.supabase.co'
-const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5tdWxyc2JxZGVxb2t2cnliYXBuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyODY0NDcsImV4cCI6MjA5NDg2MjQ0N30.iGN_OGVkw0j3VCEi9qUroMbpT37P3UPRUf1cYyqFBys'
-const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY)
+const SB=supabase.createClient('https://nmulrsbqdeqokvrybapn.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5tdWxyc2JxZGVxb2t2cnliYXBuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyODY0NDcsImV4cCI6MjA5NDg2MjQ0N30.iGN_OGVkw0j3VCEi9qUroMbpT37P3UPRUf1cYyqFBys')
 let selectedColor='White'
 
-function showToast(msg,type='success'){const t=document.getElementById('toast');t.textContent=msg;t.className=`fixed bottom-6 right-6 px-6 py-3 rounded-xl font-semibold z-50 text-white ${type==='error'?'bg-red-600':'bg-cyan-600'}`;setTimeout(()=>t.classList.add('hidden'),3000)}
-function showTab(tab){['product','order','b2b','admin'].forEach(t=>{document.getElementById(`panel-${t}`).classList.add('hidden');document.getElementById(`tab-${t}`).classList.remove('tab-active')});document.getElementById(`panel-${tab}`).classList.remove('hidden');document.getElementById(`tab-${tab}`).classList.add('tab-active');if(tab==='admin')loadAdmin()}
+function showTab(t){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nt').forEach(n=>n.classList.remove('active'));document.getElementById('panel-'+t).classList.add('active');document.getElementById('nt-'+t).classList.add('active');if(t==='admin')loadAdmin()}
+function pickColor(el,c){document.querySelectorAll('.color-circle').forEach(x=>x.classList.remove('selected'));el.classList.add('selected');selectedColor=c;document.getElementById('color-label').textContent='Selected: '+c;document.getElementById('sum-color').textContent=c}
+function updateSummary(){
+  const[pack,price]=document.getElementById('opk').value.split('|')
+  const qty=parseInt(document.getElementById('oqt').value)||1
+  document.getElementById('sum-pack').textContent=pack
+  document.getElementById('sum-qty').textContent=qty
+  document.getElementById('sum-total').textContent='€'+(parseFloat(price)*qty).toFixed(2)
+}
 
-function selectColor(el,color){document.querySelectorAll('.color-dot').forEach(d=>d.classList.remove('selected'));el.classList.add('selected');selectedColor=color;document.getElementById('selected-color-label').textContent='Selected: '+color;document.getElementById('sum-color').textContent=color}
-
-document.getElementById('o-pack')?.addEventListener('change',function(){
-  const prices={Single:'€8.99','Family Pack':'€19.99','Pro Pack':'€34.99'}
-  document.getElementById('sum-pack').textContent=this.value
-  document.getElementById('sum-total').textContent=(prices[this.value]||'€8.99')
-})
-document.getElementById('o-qty')?.addEventListener('change',function(){document.getElementById('sum-qty').textContent=this.value})
+async function seedData(){
+  const{data}=await SB.from('silidish_orders').select('id').limit(1)
+  if(data?.length)return
+  await SB.from('silidish_orders').insert([
+    {first_name:'Sofia',last_name:'Bianchi',email:'sofia@email.it',pack:'Family Pack',quantity:1,color:'Forest Green',shipping_address:'Via Dante 3, 20100 Milano',status:'Pre-order'},
+    {first_name:'Luca',last_name:'Ferrari',email:'luca@gmail.com',pack:'Single',quantity:2,color:'Midnight',shipping_address:'Corso Venezia 18, 20100 Milano',status:'Pre-order'},
+    {first_name:'Emma',last_name:'Russo',email:'emma@email.it',pack:'Pro Pack',quantity:1,color:'Ocean Blue',shipping_address:'Via Napoli 55, 80100 Napoli',status:'Pre-order'},
+  ])
+}
 
 async function placeOrder(){
-  const d={first_name:document.getElementById('o-first').value,last_name:document.getElementById('o-last').value,email:document.getElementById('o-email').value,phone:document.getElementById('o-phone').value,pack:document.getElementById('o-pack').value,quantity:parseInt(document.getElementById('o-qty').value)||1,color:selectedColor,shipping_address:document.getElementById('o-addr').value,notes:document.getElementById('o-notes').value,status:'Pre-order'}
-  if(!d.first_name||!d.email||!d.shipping_address){showToast('Fill required fields','error');return}
-  const{error}=await sb.from('silidish_orders').insert(d)
-  if(error){showToast('Error: '+error.message,'error');return}
-  showToast('🎉 Pre-order placed! We\'ll contact you soon.')
-  document.getElementById('o-first').value='';document.getElementById('o-last').value='';document.getElementById('o-email').value='';document.getElementById('o-addr').value=''
+  const[pack,price]=document.getElementById('opk').value.split('|')
+  const qty=parseInt(document.getElementById('oqt').value)||1
+  const d={first_name:document.getElementById('of').value,last_name:document.getElementById('ol').value,email:document.getElementById('oe').value,phone:document.getElementById('op').value,pack,quantity:qty,color:selectedColor,shipping_address:document.getElementById('oadr').value,status:'Pre-order'}
+  if(!d.first_name||!d.email||!d.shipping_address){alert('Please fill required fields (*)');return}
+  const{error}=await SB.from('silidish_orders').insert(d)
+  if(error){alert('Error: '+error.message);return}
+  alert('🌿 Pre-order placed! We\'ll email you when we ship.')
+  document.getElementById('of').value='';document.getElementById('ol').value='';document.getElementById('oe').value='';document.getElementById('oadr').value=''
+  loadOrderCount()
 }
 
 async function saveB2B(){
-  const d={company:document.getElementById('b-company').value,contact_name:document.getElementById('b-contact').value,email:document.getElementById('b-email').value,phone:document.getElementById('b-phone').value,volume:document.getElementById('b-volume').value,notes:document.getElementById('b-notes').value,status:'New'}
-  if(!d.company||!d.email){showToast('Fill required fields','error');return}
-  const{error}=await sb.from('silidish_b2b').insert(d)
-  if(error){showToast('Error: '+error.message,'error');return}
-  showToast('✅ Request sent! We\'ll be in touch within 24h.')
-  document.getElementById('b-company').value='';document.getElementById('b-email').value=''
+  const d={company:document.getElementById('bc').value,contact_name:document.getElementById('bco').value,email:document.getElementById('be').value,volume:document.getElementById('bv').value,notes:document.getElementById('bm').value,status:'New'}
+  if(!d.company||!d.email)return
+  await SB.from('silidish_b2b').insert(d);alert('✅ Inquiry sent! We\'ll be in touch within 24h.')
+  document.getElementById('bc').value='';document.getElementById('be').value=''
+}
+
+async function loadOrderCount(){
+  const{data}=await SB.from('silidish_orders').select('id')
+  document.getElementById('order-count').textContent=data?.length||0
 }
 
 async function loadAdmin(){
-  const[orders,b2b]=await Promise.all([sb.from('silidish_orders').select('*').order('created_at',{ascending:false}),sb.from('silidish_b2b').select('*').order('created_at',{ascending:false})])
-  document.getElementById('a-orders').textContent=orders.data?.length||0
-  document.getElementById('a-b2b').textContent=b2b.data?.length||0
-  const oList=document.getElementById('orders-list')
-  if(!orders.data?.length){oList.innerHTML='<div class="glass rounded-xl p-6 text-center text-slate-400">No orders yet</div>'}
-  else oList.innerHTML=orders.data.map(o=>`<div class="order-card"><div class="flex justify-between items-center"><div><p class="font-medium">${o.first_name} ${o.last_name}</p><p class="text-sm text-slate-400">${o.email} · ${o.pack} · qty ${o.quantity} · ${o.color}</p></div><div class="flex items-center gap-2"><span class="text-xs px-2 py-1 rounded-full bg-cyan-500/20 text-cyan-300">${o.status}</span><button onclick="deleteRec('silidish_orders','${o.id}',loadAdmin)" class="text-slate-600 hover:text-red-400"><i class="fas fa-trash text-sm"></i></button></div></div></div>`).join('')
-  const bList=document.getElementById('b2b-list')
-  if(!b2b.data?.length){bList.innerHTML='<div class="glass rounded-xl p-6 text-center text-slate-400">No B2B inquiries yet</div>'}
-  else bList.innerHTML=b2b.data.map(b=>`<div class="order-card"><div class="flex justify-between items-center"><div><p class="font-medium">${b.company}</p><p class="text-sm text-slate-400">${b.contact_name||''} · ${b.email} · ${b.volume}</p></div><div class="flex items-center gap-2"><span class="text-xs px-2 py-1 rounded-full bg-blue-500/20 text-blue-300">${b.status}</span><button onclick="deleteRec('silidish_b2b','${b.id}',loadAdmin)" class="text-slate-600 hover:text-red-400"><i class="fas fa-trash text-sm"></i></button></div></div></div>`).join('')
+  const[{data:orders},{data:b2b}]=await Promise.all([SB.from('silidish_orders').select('*').order('created_at',{ascending:false}),SB.from('silidish_b2b').select('*').order('created_at',{ascending:false})])
+  document.getElementById('a-ord').textContent=orders?.length||0
+  document.getElementById('a-b2b').textContent=b2b?.length||0
+  document.getElementById('orders-admin').innerHTML=(orders||[]).map(o=>`<div class="order-row">
+    <div><div style="font-weight:600">${o.first_name} ${o.last_name}</div><div style="font-size:13px;color:#888;margin-top:2px">${o.email} · ${o.pack} (×${o.quantity}) · ${o.color}</div></div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="background:#f0faf6;color:#3d9970;padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700">${o.status}</span>
+      <button onclick="SB.from('silidish_orders').delete().eq('id','${o.id}').then(()=>loadAdmin())" style="background:none;border:none;color:#d1d5db;cursor:pointer">🗑</button>
+    </div>
+  </div>`).join('')||'<div style="text-align:center;color:#ccc;padding:24px">No orders yet</div>'
+  document.getElementById('b2b-admin').innerHTML=(b2b||[]).map(b=>`<div class="order-row">
+    <div><div style="font-weight:600">${b.company}</div><div style="font-size:13px;color:#888;margin-top:2px">${b.contact_name||''} · ${b.email} · ${b.volume}</div></div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="background:#eff6ff;color:#1d4ed8;padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700">${b.status}</span>
+      <button onclick="SB.from('silidish_b2b').delete().eq('id','${b.id}').then(()=>loadAdmin())" style="background:none;border:none;color:#d1d5db;cursor:pointer">🗑</button>
+    </div>
+  </div>`).join('')||'<div style="text-align:center;color:#ccc;padding:24px">No inquiries yet</div>'
 }
 
-async function deleteRec(table,id,reload){if(!confirm('Delete?'))return;await sb.from(table).delete().eq('id',id);reload()}
+async function init(){await seedData();loadOrderCount()}
+init()
 </script>
 </body>
 </html>
